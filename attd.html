@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<head>
+    <style>
+        table {
+
+
+            border-collapse: collapse;
+            border: 2px solid burlywood;
+            font-weight: bold;
+        }
+
+        th {
+            border: 2px solid black;
+            padding: 10px;
+            font-size: 32;
+        }
+
+        td {
+            border: 2px solid black;
+            padding: 10px;
+            font-size: 24;
+        }
+    </style>
+
+</head>
+
+<body>
+    
+    <label for="file-input">upload namelist</label>
+    <input type="file" id="file-input">
+    <label for="file-attendance">upload attendance</label>
+    <input type="file" id="file-attendance">
+    <div id="tab"></div>
+    
+
+    <script>
+
+        var name_list;
+        var input, input_data;
+        var text;
+        var i = 1000;
+
+        var today = new Date();
+
+
+        // hello()
+
+        // function hello() {
+        //     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        //     var hour = 11;
+        //     setTimeout(() => hello(), 5000);
+        //     console.log(today.getHours() == hour && today.getMinutes() < 4)
+        // }
+        document.getElementById("file-input").onchange = function () {
+            var reader = new FileReader;
+            text = this.files[0];
+            reader.onload = function (progressEvent) {
+                input = this.result;
+                input_data=input.split('\n');
+                createtable();
+            }
+            reader.readAsText(text);
+            }
+
+        document.getElementById("file-attendance").onchange = function () {
+            var reader = new FileReader;
+            text = this.files[0];
+            reader.onload = function (progressEvent) {
+                all_hours = this.result;
+                hours=all_hours.split('Hour_');
+                for(var i=1;i<8;i++){
+                hour_list=hours[i].split('\n');
+                    var stud=""
+                    row=hour_list[0];
+                for (var j = 1; j < hour_list.length-1; j++) 
+                        stud+=hour_list[j].toUpperCase();
+                        console.log(stud);
+                
+                     var name = document.getElementsByClassName("regno");
+                     var attd = document.getElementsByClassName(row);
+                    for (var k = 0; k < name.length; k++) {
+                        console.log(name[k])
+                       attd[k].textContent = (stud.includes(name[k].innerHTML)) ? "P" : "A";
+                       attd[k].style.color = (stud.includes(name[k].innerHTML)) ? "green" : "red";
+                    }
+                
+
+                }
+            
+            }
+
+              
+            
+            reader.readAsText(text);
+        }
+
+        function createtable() {
+            var tablecode = ` <table >
+        <tr>
+            <th>Name</th>
+            <th>Reg No</th>
+            <th>Hour 1</th>
+            <th>Hour 2</th>
+            <th>Hour 3</th>
+            <th>Hour 4</th>
+            <th>Hour 5</th>
+            <th>Hour 6</th>
+            <th>Hour 7</th>
+        </tr>`
+            for (var i = 0; i < input_data.length; i++) {
+                var j = input_data[i].split(',');
+                tablecode += `<tr>
+            <td class="name">`+ j[1] + `</td>
+            <td class="regno">`+ j[0] + `</td>
+            <td class="1"></td>
+            <td class="2"></td>
+            <td class="3"></td>
+            <td class="4"></td>
+            <td class="5"></td>
+            <td class="6"></td>
+            <td class="7"></td>
+        </tr>`
+            }
+            tablecode += `</table>`;
+            document.getElementById('tab').innerHTML = tablecode;
+
+        }
+    </script>
+</body>
+
+</html>
